@@ -8,11 +8,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
+type ChatMessage = {
+  role: "user" | "bot";
+  content: string;
+};
+
 export default function Home() {
-  const [messages, setMessages] = useState<{
-    role: "user" | "bot";
-    content: string;
-  }[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -23,8 +25,14 @@ export default function Home() {
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-    const userMessage = { role: "user", content: input } as const;
-    setMessages((prev) => [...prev, userMessage]);
+
+    const userMessage: ChatMessage = { role: "user", content: input };
+
+    // prepare new state
+    const updatedMessages: ChatMessage[] = [...messages, userMessage];
+
+    // update local state immediately
+    setMessages(updatedMessages);
     setInput("");
     setLoading(true);
 
@@ -32,9 +40,11 @@ export default function Home() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
+        body: JSON.stringify({ messages: updatedMessages }),
       });
+
       const data = await res.json();
+
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
     } catch (err) {
       setMessages((prev) => [...prev, { role: "bot", content: "Error: Failed to fetch response." }]);
@@ -42,6 +52,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white">
