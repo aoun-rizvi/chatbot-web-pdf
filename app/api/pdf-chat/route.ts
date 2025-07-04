@@ -72,7 +72,7 @@ Answer:
   }
 }
 
-export async function loadAllChunksCached(category: string) {
+async function loadAllChunksCached(category: string) {
   const cacheKey = category;
   // const cacheKey = "all-pdf-chunks";
   const cached = getCachedChunks(cacheKey);
@@ -86,7 +86,7 @@ export async function loadAllChunksCached(category: string) {
   return chunks;
 }
 
-export async function loadAllChunksFromFirestore(category: string): Promise<ChunkDocument[]> {
+async function loadAllChunksFromFirestore(category: string): Promise<ChunkDocument[]> {
   const allChunks: ChunkDocument[] = [];
 
   // Step 1: Get all documents inside the collection

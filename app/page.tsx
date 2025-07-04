@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { addDocumentsForPdfs } from "@/lib/addDocumentsForPdfs";
 
 
 // When should you refer to secondary care for eczema
@@ -68,6 +69,10 @@ export default function PdfChat() {
     const data = await res.json();
   };
 
+  const updateFirestoreWithPdfs = async () => {
+    addDocumentsForPdfs();
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white">
       <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none">
@@ -98,12 +103,14 @@ export default function PdfChat() {
             <Button onClick={handleSubmit} disabled={loading} className="bg-cyan-500 hover:bg-cyan-600">
               {loading ? "..." : "Ask"}
             </Button>
-            {/* <Button onClick={handleQuestionCategory} disabled={loading}>
-          Question Category
-        </Button> */}
-            {/* <Button onClick={handleEmbed} disabled={loading}>
-              Embed API
-            </Button> */}
+            {/* <div className="flex flex-col gap-1">
+              <Button onClick={updateFirestoreWithPdfs} disabled={loading}>
+                PDF Config
+              </Button>
+              <Button onClick={handleEmbed} disabled={loading}>
+                PDF Embedding
+              </Button>
+            </div> */}
           </div>
         </CardContent>
       </Card>

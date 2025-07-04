@@ -13,6 +13,7 @@ const CHUNK_COLLECTION_NAME = "chunks";
 export async function embedAllPDFsFromStorage() {
   const categories = Category.getAllSlugs();
   for (const category of categories) {
+    console.log("category", category);
     const pdfCollection = collection(db, category);
     const snapshot = await getDocs(pdfCollection);
 
@@ -80,6 +81,7 @@ export async function embedAllPDFsFromStorage() {
       }
     }
   }
+  console.log("Done PDF Embedding!");
 }
 
 // Check if sub-collection exists
