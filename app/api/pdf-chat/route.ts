@@ -7,8 +7,6 @@ import { openai } from "@/lib/openai";
 import { getCachedChunks, setCachedChunks } from "@/lib/cache";
 
 
-const STORAGE_DIRECTORY = "pdfs";
-const COLLECTION_NAME = "pdfs";
 const CHUNK_COLLECTION_NAME = "chunks";
 // 1 day in milliseconds = 24 * 60 * 60 * 1000 = 86400000
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -26,7 +24,7 @@ type ChunkDocument = {
 
 export async function POST(req: Request) {
   try {
-    const { question } = await req.json();
+    const { question, category } = await req.json();
 
     if (!question || typeof question !== "string") {
       return NextResponse.json({ error: "Invalid question" }, { status: 400 });
@@ -36,14 +34,7 @@ export async function POST(req: Request) {
     const embeddedQuery = await embedText(question);
 
     // 2. Load all PDF chunks from Firestore
-    // const snapshot = await getDocs(collection(db, "pdfs"));
-    // const allDocs = snapshot.docs.map((doc) => doc.data()) as {
-    //   chunk: string;
-    //   embedding: number[];
-    //   metadata: { fileName: string; firestoreId: string };
-    // }[];
-    const allDocs = await loadAllChunksCached();
-    // const allDocs = await loadAllChunksFromFirestore();
+    const allDocs = await loadAllChunksCached(category);
 
     // 3. Get top-k similar chunks
     const topChunks = getTopKRelevantChunks(embeddedQuery, allDocs, 5);
@@ -81,30 +72,31 @@ Answer:
   }
 }
 
-export async function loadAllChunksCached() {
-  const cacheKey = "all-pdf-chunks";
+export async function loadAllChunksCached(category: string) {
+  const cacheKey = category;
+  // const cacheKey = "all-pdf-chunks";
   const cached = getCachedChunks(cacheKey);
 
   if (cached && Date.now() - cached.timestamp < ONE_DAY_MS) {
     return cached.data;
   }
 
-  const chunks = await loadAllChunksFromFirestore();
+  const chunks = await loadAllChunksFromFirestore(category);
   setCachedChunks(cacheKey, chunks);
   return chunks;
 }
 
-export async function loadAllChunksFromFirestore(): Promise<ChunkDocument[]> {
+export async function loadAllChunksFromFirestore(category: string): Promise<ChunkDocument[]> {
   const allChunks: ChunkDocument[] = [];
 
-  // Step 1: Get all documents inside 'pdfs' collection
-  const pdfsCollection = collection(db, "pdfs");
+  // Step 1: Get all documents inside the collection
+  const pdfsCollection = collection(db, category);
   const pdfDocsSnapshot = await getDocs(pdfsCollection);
 
   // Step 2: For each PDF document, get the 'chunks' subcollection
   for (const pdfDoc of pdfDocsSnapshot.docs) {
     const firestoreId = pdfDoc.id;
-    const chunksRef = collection(db, "pdfs", firestoreId, "chunks");
+    const chunksRef = collection(db, category, firestoreId, CHUNK_COLLECTION_NAME);
     const chunksSnapshot = await getDocs(chunksRef);
 
     const chunks = chunksSnapshot.docs.map((doc) => {
