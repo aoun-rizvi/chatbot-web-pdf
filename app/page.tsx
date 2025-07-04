@@ -77,7 +77,7 @@ export default function PdfChat() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white">
       <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none">
         <CardContent className="p-1">
-          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">AI Chat Assistant</h1>
+          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">Medical AI Assistant</h1>
           <ScrollArea className="h-96 mb-4 space-y-3">
             {messages.map((msg, i) => (
               <div
