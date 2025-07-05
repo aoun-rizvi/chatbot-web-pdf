@@ -4,12 +4,14 @@ import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { addDocumentsForPdfs } from "@/lib/addDocumentsForPdfs";
 
 
 // When should you refer to secondary care for eczema
 // category should be: Skin
+// What should i do for a chronic diarrhea patient
+
 
 export default function PdfChat() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -74,26 +76,35 @@ export default function PdfChat() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white">
-      <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none">
-        <CardContent className="p-1">
-          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">Medical AI Assistant</h1>
-          <ScrollArea className="flex-1 overflow-y-auto mb-4 pr-2">
-            <div className="space-y-3">
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`p-3 rounded-md ${msg.role === "user"
-                    ? "bg-cyan-700 text-slate-900 text-right"
-                    : "bg-slate-700 text-slate-400 text-left"
-                    }`}
-                >
-                  {msg.content}
-                </div>
-              ))}
-              <div ref={scrollRef} />
-            </div>
-          </ScrollArea>
+    <div className="h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white overflow-hidden">
+      <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none flex flex-col h-full">
+        <CardContent className="flex flex-col flex-1 p-4 overflow-hidden">
+          {/* Header */}
+          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">
+            Medical AI Assistant
+          </h1>
+
+          {/* Scrollable message area */}
+          <div className="flex-1 overflow-hidden mb-4">
+            <ScrollArea className="h-full pr-2">
+              <div className="space-y-3">
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`p-3 rounded-md ${msg.role === "user"
+                      ? "bg-cyan-700 text-slate-900 text-right"
+                      : "bg-slate-700 text-slate-400 text-left"
+                      }`}
+                  >
+                    {msg.content}
+                  </div>
+                ))}
+                <div ref={scrollRef} />
+              </div>
+            </ScrollArea>
+          </div>
+
+          {/* Input section */}
           <div className="flex items-center gap-2">
             <Textarea
               value={input}
@@ -102,20 +113,26 @@ export default function PdfChat() {
               className="flex-1 bg-slate-700 border-none text-white resize-none h-24"
               disabled={loading}
             />
-            <Button onClick={handleSubmit} disabled={loading} className="bg-cyan-500 hover:bg-cyan-600">
+            <Button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="bg-cyan-500 hover:bg-cyan-600"
+            >
               {loading ? "..." : "Ask"}
             </Button>
-            {/* <div className="flex flex-col gap-1">
-              <Button onClick={updateFirestoreWithPdfs} disabled={loading}>
-                PDF Config
-              </Button>
-              <Button onClick={handleEmbed} disabled={loading}>
-                PDF Embedding
-              </Button>
-            </div> */}
           </div>
+          {/* <div className="flex flex-col gap-2">
+            <Button onClick={updateFirestoreWithPdfs} disabled={loading}>
+              PDF Config
+            </Button>
+            <Button onClick={handleEmbed} disabled={loading}>
+              PDF Embedding
+            </Button>
+          </div> */}
         </CardContent>
       </Card>
     </div>
   );
+
+
 }
