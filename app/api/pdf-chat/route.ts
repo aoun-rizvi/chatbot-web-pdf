@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     const context = topChunks.join("\n---\n");
 
     // 5. External links to include in context
-    const links = ["nice.org.uk"];
+    const links = [""];
     let linksContext = 'Also include these web links as part of the context: ';
     for (const link of links) {
       linksContext += link + ", "
