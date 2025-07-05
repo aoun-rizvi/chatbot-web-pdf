@@ -77,16 +77,14 @@ export default function PdfChat() {
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white overflow-hidden">
-      <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none flex flex-col h-full">
-        <CardContent className="flex flex-col flex-1 p-4 overflow-hidden">
+      <Card className="py-2 w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none flex flex-col h-full">
+        <CardContent className="px-2 flex flex-col flex-1 overflow-hidden">
           {/* Header */}
-          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">
-            Medical AI Assistant
-          </h1>
+          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">Medical AI Assistant</h1>
 
           {/* Scrollable message area */}
           <div className="flex-1 overflow-hidden mb-4">
-            <ScrollArea className="h-full pr-2">
+            <ScrollArea className="h-full px-3">
               <div className="space-y-3">
                 {messages.map((msg, i) => (
                   <div
