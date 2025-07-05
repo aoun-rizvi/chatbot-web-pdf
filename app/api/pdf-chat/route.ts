@@ -24,7 +24,7 @@ type ChunkDocument = {
 
 export async function POST(req: Request) {
   try {
-    const { question, category } = await req.json();
+    const { question, category, history } = await req.json();
 
     if (!question || typeof question !== "string") {
       return NextResponse.json({ error: "Invalid question" }, { status: 400 });
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const topChunks = getTopKRelevantChunks(embeddedQuery, allDocs, 5);
 
     // 4. Ask OpenAI using retrieved content as context
-    const context = topChunks.join("\n---\n");
+    let context = topChunks.join("\n---\n");
 
     // 5. External links to include in context
     const links = [""];
@@ -50,9 +50,31 @@ export async function POST(req: Request) {
     }
 
     // 6. other parameters
-    const maxWordCount = 150;
+    const maxWordCount = 300;
 
-    const prompt = `
+    // 7. Convert history into OpenAI message format
+    const openAiMessages = (history || []).map((msg: any) => ({
+      role: msg.role === "bot" ? "assistant" : msg.role,
+      content: msg.content,
+    }));
+
+    // 8. Add system prompt and RAG context to the start
+    openAiMessages.unshift({
+      role: "system",
+      content: "You are a helpful PDF knowledge assistant. Use the provided PDF context when answering.",
+    });
+
+    // if (!context || context === '') {
+    //   context = openAiMessages
+    //     .filter((msg: any) => msg.role === 'assistant' && msg.content !== undefined)
+    //     .map((msg: any) => msg.content)
+    //     .join('\n');
+    // }
+
+    // 9. Add user prompt and context
+    openAiMessages.push({
+      role: "user",
+      content: `
 You are a helpful assistant. Answer the question below using only the context provided.
 
 Context:
@@ -62,15 +84,35 @@ ${linksContext}
 Question:
 ${question}
 
-Answer: Summarize the answer in less than ${maxWordCount} words.
-`;
+Answer:
+`,
+    });
 
+    //     const prompt = `
+    // You are a helpful assistant. Answer the question below using only the context provided.
+
+    // Context:
+    // ${context}
+    // ${linksContext}
+
+    // Question:
+    // ${question}
+
+    // Answer:
+    // `;
+
+    // 10. Call OpenAI API with message history, context, and prompt
+    // const chatCompletion = await openai.chat.completions.create({
+    //   model: "gpt-4o",
+    //   messages: [
+    //     { role: "system", content: "You are a PDF knowledge assistant." },
+    //     { role: "user", content: prompt },
+    //   ],
+    //   temperature: 0.2,
+    // });
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [
-        { role: "system", content: "You are a PDF knowledge assistant." },
-        { role: "user", content: prompt },
-      ],
+      messages: openAiMessages,
       temperature: 0.2,
     });
 

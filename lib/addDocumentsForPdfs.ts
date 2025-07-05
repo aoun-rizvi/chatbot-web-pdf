@@ -6,7 +6,10 @@ export async function addDocumentsForPdfs() {
   // await giSystem();
   // await cardiovascularSystem();
   // await respiratory();
-  await centralNervousSystem();
+  // await centralNervousSystem();
+  // await infections();
+  // await endocrine();
+  await obstetricsGynecologyUrinaryTract();
 }
 
 async function giSystem() {
@@ -70,6 +73,37 @@ async function cardiovascularSystem() {
   }
 }
 
+async function respiratory() {
+  const collectionName = "respiratory";
+  const folderName = "respiratory";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Oxygen_in_COPD_guidelines.pdf", storagePath: `${folderName}/Oxygen_in_COPD_guidelines.pdf` },
+      { fileName: "Greener_Inhaler_Prescribing_Guidance.pdf", storagePath: `${folderName}/Greener_Inhaler_Prescribing_Guidance.pdf` },
+      { fileName: "COPD_management.pdf", storagePath: `${folderName}/COPD_management.pdf` },
+      { fileName: "GP_referal_for_SLIT_paediatrics.pdf", storagePath: `${folderName}/GP_referal_for_SLIT_paediatrics.pdf` },
+      { fileName: "Childrens_Asthma.pdf", storagePath: `${folderName}/Childrens_Asthma.pdf` },
+      { fileName: "Asthma_management_in_adults.pdf", storagePath: `${folderName}/Asthma_management_in_adults.pdf` },
+      { fileName: "Adult Asthma Treatment Algorithm NICE 2024 Update.pdf", storagePath: `${folderName}/Adult Asthma Treatment Algorithm NICE 2024 Update.pdf` },
+      { fileName: "Chapter_3_Respiratory_system.pdf", storagePath: `${folderName}/Chapter_3_Respiratory_system.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
 async function centralNervousSystem() {
   const collectionName = "central-nervous-system";
   const folderName = "central-nervous-system";
@@ -113,23 +147,86 @@ async function centralNervousSystem() {
   }
 }
 
-async function respiratory() {
-  const collectionName = "respiratory";
-  const folderName = "respiratory";
+async function infections() {
+  const collectionName = "infections";
+  const folderName = "infections";
 
   try {
     const cnsCollection = collection(db, collectionName);
     const batch = writeBatch(db);
 
     const documents = [
-      { fileName: "Oxygen_in_COPD_guidelines.pdf", storagePath: `${folderName}/Oxygen_in_COPD_guidelines.pdf` },
-      { fileName: "Greener_Inhaler_Prescribing_Guidance.pdf", storagePath: `${folderName}/Greener_Inhaler_Prescribing_Guidance.pdf` },
-      { fileName: "COPD_management.pdf", storagePath: `${folderName}/COPD_management.pdf` },
-      { fileName: "GP_referal_for_SLIT_paediatrics.pdf", storagePath: `${folderName}/GP_referal_for_SLIT_paediatrics.pdf` },
-      { fileName: "Childrens_Asthma.pdf", storagePath: `${folderName}/Childrens_Asthma.pdf` },
-      { fileName: "Asthma_management_in_adults.pdf", storagePath: `${folderName}/Asthma_management_in_adults.pdf` },
-      { fileName: "Adult Asthma Treatment Algorithm NICE 2024 Update.pdf", storagePath: `${folderName}/Adult Asthma Treatment Algorithm NICE 2024 Update.pdf` },
-      { fileName: "Chapter_3_Respiratory_system.pdf", storagePath: `${folderName}/Chapter_3_Respiratory_system.pdf` },
+      { fileName: "Management_of_Lower_UTI_in_CKD.pdf", storagePath: `${folderName}/Management_of_Lower_UTI_in_CKD.pdf` },
+      { fileName: "Oral_Thrush_In_Babies.pdf", storagePath: `${folderName}/Oral_Thrush_In_Babies.pdf` },
+      { fileName: "OPAT_step_up_policy.pdf", storagePath: `${folderName}/OPAT_step_up_policy.pdf` },
+      { fileName: "Onychomycosis-Guideline.pdf", storagePath: `${folderName}/Onychomycosis-Guideline.pdf` },
+      { fileName: "Nebulised_Colomycin.pdf", storagePath: `${folderName}/Nebulised_Colomycin.pdf` },
+      { fileName: "Chlamydia_Testing_and_Screening.pdf", storagePath: `${folderName}/Chlamydia_Testing_and_Screening.pdf` },
+      { fileName: "Chicken_pox_in_pregnancy_neonates.pdf", storagePath: `${folderName}/Chicken_pox_in_pregnancy_neonates.pdf` },
+      { fileName: "Management_of_C_diff_infection.pdf", storagePath: `${folderName}/Management_of_C_diff_infection.pdf` },
+      { fileName: "summary_antimicrobial_prescribing_guidance.pdf", storagePath: `${folderName}/summary_antimicrobial_prescribing_guidance.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function endocrine() {
+  const collectionName = "endocrine";
+  const folderName = "endocrine";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Osteoporosis_Guideline.pdf", storagePath: `${folderName}/Osteoporosis_Guideline.pdf` },
+      { fileName: "Bisphosphonate_length_of_treatment_in_osteoporosis.pdf", storagePath: `${folderName}/Bisphosphonate_length_of_treatment_in_osteoporosis.pdf` },
+      { fileName: "Menopause_Guideline.pdf", storagePath: `${folderName}/Menopause_Guideline.pdf` },
+      { fileName: "Liothyronine_position_statement.pdf", storagePath: `${folderName}/Liothyronine_position_statement.pdf` },
+      { fileName: "Cabergoline_&_Quinagolide.pdf", storagePath: `${folderName}/Cabergoline_&_Quinagolide.pdf` },
+      { fileName: "Finerenone Prescribing guidance for Primary Care.pdf", storagePath: `${folderName}/Finerenone Prescribing guidance for Primary Care.pdf` },
+      { fileName: "Diabetes_glucose_monitoring_interim_position_statement.pdf", storagePath: `${folderName}/Diabetes_glucose_monitoring_interim_position_statement.pdf` },
+      { fileName: "Glucose_control_in_Type_2_Diabetes.pdf", storagePath: `${folderName}/Glucose_control_in_Type_2_Diabetes.pdf` },
+      { fileName: "Freestyle_Libre.pdf", storagePath: `${folderName}/Freestyle_Libre.pdf` },
+      { fileName: "Blood_glucose_monitoring_meter_formulary.pdf", storagePath: `${folderName}/Blood_glucose_monitoring_meter_formulary.pdf` },
+      { fileName: "Cinacalcet_guidance_on_prescribing_and_monitoring.pdf", storagePath: `${folderName}/Cinacalcet_guidance_on_prescribing_and_monitoring.pdf` },
+      { fileName: "Chapter_6_Endocrine.pdf", storagePath: `${folderName}/Chapter_6_Endocrine.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function obstetricsGynecologyUrinaryTract() {
+  const collectionName = "obstetrics-gynecology-urinary-tract";
+  const folderName = "obstetrics-gynecology-urinary-tract";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Sayana_Press_Protocol.pdf", storagePath: `${folderName}/Sayana_Press_Protocol.pdf` },
+      { fileName: "Emergency_contraception.pdf", storagePath: `${folderName}/Emergency_contraception.pdf` },
+      { fileName: "Continence_PG_Community_Formulary.pdf", storagePath: `${folderName}/Continence_PG_Community_Formulary.pdf` },
+      { fileName: "Chapter_7_Obs_gynae_urinary_tract_disorders.pdf", storagePath: `${folderName}/Chapter_7_Obs_gynae_urinary_tract_disorders.pdf` },
     ];
 
     for (const docData of documents) {

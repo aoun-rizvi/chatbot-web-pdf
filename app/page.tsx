@@ -42,7 +42,11 @@ export default function PdfChat() {
     res = await fetch("/api/pdf-chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: input, category: data.category }),
+      body: JSON.stringify({
+        question: input,
+        category: data.category,
+        history: messages,
+      }),
     });
 
     data = await res.json();
