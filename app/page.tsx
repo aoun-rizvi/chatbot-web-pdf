@@ -78,19 +78,21 @@ export default function PdfChat() {
       <Card className="w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none">
         <CardContent className="p-1">
           <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">Medical AI Assistant</h1>
-          <ScrollArea className="h-96 mb-4 space-y-3">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`p-3 rounded-md ${msg.role === "user"
-                  ? "bg-cyan-700 text-slate-900 text-right"
-                  : "bg-slate-700 text-slate-400 text-left"
-                  }`}
-              >
-                {msg.content}
-              </div>
-            ))}
-            <div ref={scrollRef} />
+          <ScrollArea className="flex-1 overflow-y-auto mb-4 pr-2">
+            <div className="space-y-3">
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`p-3 rounded-md ${msg.role === "user"
+                    ? "bg-cyan-700 text-slate-900 text-right"
+                    : "bg-slate-700 text-slate-400 text-left"
+                    }`}
+                >
+                  {msg.content}
+                </div>
+              ))}
+              <div ref={scrollRef} />
+            </div>
           </ScrollArea>
           <div className="flex items-center gap-2">
             <Textarea
