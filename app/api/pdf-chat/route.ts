@@ -42,16 +42,27 @@ export async function POST(req: Request) {
     // 4. Ask OpenAI using retrieved content as context
     const context = topChunks.join("\n---\n");
 
+    // 5. External links to include in context
+    const links = ["nice.org.uk"];
+    let linksContext = 'Also include these web links as part of the context: ';
+    for (const link of links) {
+      linksContext += link + ", "
+    }
+
+    // 6. other parameters
+    const maxWordCount = 150;
+
     const prompt = `
 You are a helpful assistant. Answer the question below using only the context provided.
 
 Context:
 ${context}
+${linksContext}
 
 Question:
 ${question}
 
-Answer:
+Answer: Summarize the answer in less than ${maxWordCount} words.
 `;
 
     const chatCompletion = await openai.chat.completions.create({
