@@ -84,7 +84,16 @@ ${linksContext}
 Question:
 ${question}
 
-Answer:
+Answer Format:
+Here is your style guide for how to write the:
+- Informative and clear: Prioritize clarity and precision in presenting data.
+- Sequential and logical: Guide the reader through information or steps in a clear, logical sequence.
+- Steady flow: Ensure a smooth flow of information, transitioning seamlessly from one point to the next.
+- Precision: Be very precise with data presentation, do not message any data.
+- Dosage: Always provide clear dosage if available, in a logical and easy-to-read manner. Give the exact amount needed and for how many days.
+- External web links: Use links sparingly and only when really needed, but when you do make sure you actually include them. Only allowed external links in this case are: nice.org.uk and BNF.nice.org.uk .
+- Presentation: Try your best to present information in bullet form and/or table form when necessary. Try to avoid long paragraphs of text.
+- Data accuracy: In no circumstance give incorrect data. The most important thing is to present accurate data given the knowledge base.
 `,
     });
 

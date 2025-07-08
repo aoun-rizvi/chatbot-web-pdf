@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { addDocumentsForPdfs } from "@/lib/addDocumentsForPdfs";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 
 // When should you refer to secondary care for eczema
@@ -98,7 +100,11 @@ export default function PdfChat() {
                       : "bg-slate-700 text-slate-400 text-left"
                       }`}
                   >
-                    {msg.content}
+                    <div className="prose prose-invert max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.content}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 ))}
                 <div ref={scrollRef} />
