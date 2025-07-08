@@ -9,7 +9,15 @@ export async function addDocumentsForPdfs() {
   // await centralNervousSystem();
   // await infections();
   // await endocrine();
-  await obstetricsGynecologyUrinaryTract();
+  // await obstetricsGynecologyUrinaryTract();
+  // await malignantDiseaseImmunosuppression();
+  // await nutritionBlood();
+  // await musculoskeletalJointDiseases();
+  // await eye();
+  // await earNoseThroat();
+  // await skin();
+  // await immunologicalProductsVaccines();
+  // await anaesthesia();
 }
 
 async function giSystem() {
@@ -227,6 +235,217 @@ async function obstetricsGynecologyUrinaryTract() {
       { fileName: "Emergency_contraception.pdf", storagePath: `${folderName}/Emergency_contraception.pdf` },
       { fileName: "Continence_PG_Community_Formulary.pdf", storagePath: `${folderName}/Continence_PG_Community_Formulary.pdf` },
       { fileName: "Chapter_7_Obs_gynae_urinary_tract_disorders.pdf", storagePath: `${folderName}/Chapter_7_Obs_gynae_urinary_tract_disorders.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function malignantDiseaseImmunosuppression() {
+  const collectionName = "malignant-disease-immunosuppression";
+  const folderName = "malignant-disease-immunosuppression";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "asd.pdf", storagePath: `${folderName}/asd.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function nutritionBlood() {
+  const collectionName = "nutrition-blood";
+  const folderName = "nutrition-blood";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Vitamin_supplementation_in_alcohol_misuse.pdf", storagePath: `${folderName}/Vitamin_supplementation_in_alcohol_misuse.pdf` },
+      { fileName: "Position_Statement_for_Vit_D.pdf", storagePath: `${folderName}/Position_Statement_for_Vit_D.pdf` },
+      { fileName: "Vitamin_D_Deficiency_in_Primary_Care.pdf", storagePath: `${folderName}/Vitamin_D_Deficiency_in_Primary_Care.pdf` },
+      { fileName: "Vitamin_B_compound_position_statement.pdf", storagePath: `${folderName}/Vitamin_B_compound_position_statement.pdf` },
+      { fileName: "Management_of_undernutrition_in_adults.pdf", storagePath: `${folderName}/Management_of_undernutrition_in_adults.pdf` },
+      { fileName: "Non_hypoallergenic_infant_products.pdf", storagePath: `${folderName}/Non_hypoallergenic_infant_products.pdf` },
+      { fileName: "Phosphate_binders.pdf", storagePath: `${folderName}/Phosphate_binders.pdf` },
+      { fileName: "Derbyshire_Gluten_Free_position_statement.pdf", storagePath: `${folderName}/Derbyshire_Gluten_Free_position_statement.pdf` },
+      { fileName: "Derbyshire_CMA_guideline_Oct_24.pdf", storagePath: `${folderName}/Derbyshire_CMA_guideline_Oct_24.pdf` },
+      { fileName: "Bariatric_surgery.pdf", storagePath: `${folderName}/Bariatric_surgery.pdf` },
+      { fileName: "Chapter_9_nutrition_and_blood.pdf", storagePath: `${folderName}/Chapter_9_nutrition_and_blood.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function musculoskeletalJointDiseases() {
+  const collectionName = "musculoskeletal-joint-diseases";
+  const folderName = "musculoskeletal-joint-diseases";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Low_back_pain_and_sciatica.pdf", storagePath: `${folderName}/Low_back_pain_and_sciatica.pdf` },
+      { fileName: "Hydroxychloroquine_prescribing_guidance.pdf", storagePath: `${folderName}/Hydroxychloroquine_prescribing_guidance.pdf` },
+      { fileName: "Chapter_10_Musculo_Skeletal_and_Joint_Diseases.pdf", storagePath: `${folderName}/Chapter_10_Musculo_Skeletal_and_Joint_Diseases.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function eye() {
+  const collectionName = "eye";
+  const folderName = "eye";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Glaucoma.pdf", storagePath: `${folderName}/Glaucoma.pdf` },
+      { fileName: "Dry_eye_prescribing.pdf", storagePath: `${folderName}/Dry_eye_prescribing.pdf` },
+      { fileName: "Chapter_11_Eye.pdf", storagePath: `${folderName}/Chapter_11_Eye.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function earNoseThroat() {
+  const collectionName = "ear-nose-throat";
+  const folderName = "ear-nose-throat";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Chronic rhinosinusitis.pdf", storagePath: `${folderName}/Chronic rhinosinusitis.pdf` },
+      { fileName: "Allergic_Rhinitis_pathway_inc_Dymista.pdf", storagePath: `${folderName}/Allergic_Rhinitis_pathway_inc_Dymista.pdf` },
+      { fileName: "Chapter_12_Ear_nose_and_oropharynx.pdf", storagePath: `${folderName}/Chapter_12_Ear_nose_and_oropharynx.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function skin() {
+  const collectionName = "skin";
+  const folderName = "skin";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "Emollient_prescribing.pdf", storagePath: `${folderName}/Emollient_prescribing.pdf` },
+      { fileName: "Actinic_Keratoses.pdf", storagePath: `${folderName}/Actinic_Keratoses.pdf` },
+      { fileName: "Managing_Acne_vulgaris.pdf", storagePath: `${folderName}/Managing_Acne_vulgaris.pdf` },
+      { fileName: "Chapter_13_Skin.pdf", storagePath: `${folderName}/Chapter_13_Skin.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function immunologicalProductsVaccines() {
+  const collectionName = "immunological-products-vaccines";
+  const folderName = "immunological-products-vaccines";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "asd.pdf", storagePath: `${folderName}/asd.pdf` },
+    ];
+
+    for (const docData of documents) {
+      const newDocRef = doc(cnsCollection); // Auto-generated ID
+      batch.set(newDocRef, docData);
+    }
+
+    await batch.commit();
+    console.log("✅ All documents written successfully in a batch");
+  } catch (error) {
+    console.error("❌ Error writing batch to Firestore:", error);
+  }
+}
+
+async function anaesthesia() {
+  const collectionName = "anaesthesia";
+  const folderName = "anaesthesia";
+
+  try {
+    const cnsCollection = collection(db, collectionName);
+    const batch = writeBatch(db);
+
+    const documents = [
+      { fileName: "asd.pdf", storagePath: `${folderName}/asd.pdf` },
     ];
 
     for (const docData of documents) {
