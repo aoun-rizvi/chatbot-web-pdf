@@ -113,7 +113,7 @@ export default function PdfChat() {
           </div>
 
           {/* Input section */}
-          <div className="flex items-center gap-2">
+          <div className="pb-1 flex items-center gap-2">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
