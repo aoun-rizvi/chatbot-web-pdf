@@ -43,11 +43,14 @@ export async function POST(req: Request) {
     let context = topChunks.join("\n---\n");
 
     // 5. External links to include in context
-    const links = [""];
-    let linksContext = 'Also include these web links as part of the context: ';
-    for (const link of links) {
-      linksContext += link + ", "
-    }
+    const links = ["https://www.nice.org.uk", "https://bnf.nice.org.uk"];
+    const linksContext = links.length
+      ? `Also include these web links as part of the context: ${links.join(", ")}`
+      : "";
+    // let linksContext = 'Also include these web links as part of the context: ';
+    // for (const link of links) {
+    //   linksContext += link + ", "
+    // }
 
     // 6. other parameters
     const maxWordCount = 300;
@@ -61,64 +64,35 @@ export async function POST(req: Request) {
     // 8. Add system prompt and RAG context to the start
     openAiMessages.unshift({
       role: "system",
-      content: "You are a helpful PDF knowledge assistant. Use the provided PDF context when answering.",
-    });
+      content: `
+      You are a helpful PDF knowledge assistant.
 
-    // if (!context || context === '') {
-    //   context = openAiMessages
-    //     .filter((msg: any) => msg.role === 'assistant' && msg.content !== undefined)
-    //     .map((msg: any) => msg.content)
-    //     .join('\n');
-    // }
+      Instructions:
+      Here is your style guide for how to write the:
+      - Informative and clear: Prioritize clarity and precision in presenting data.
+      - Sequential and logical: Guide the reader through information or steps in a clear, logical sequence.
+      - Steady flow: Ensure a smooth flow of information, transitioning seamlessly from one point to the next.
+      - Precision: Be very precise with data presentation, do not message any data.
+      - Dosage: Always provide clear dosage if available, in a logical and easy-to-read manner. Give the exact amount needed and for how many days.
+      - External web links: Use links sparingly and only when really needed, but when you do make sure you actually include them. Only link to nice.org.uk or bnf.nice.org.uk if necessary.
+      - Presentation: Try your best to present information in bullet form and/or table form when necessary. Try to avoid long paragraphs of text.
+      - Data accuracy: In no circumstance give incorrect data. The most important thing is to present accurate data given the knowledge base.
+      `,
+    });
 
     // 9. Add user prompt and context
     openAiMessages.push({
       role: "user",
       content: `
-You are a helpful assistant. Answer the question below using only the context provided.
-
 Context:
 ${context}
 ${linksContext}
 
 Question:
 ${question}
-
-Answer Format:
-Here is your style guide for how to write the:
-- Informative and clear: Prioritize clarity and precision in presenting data.
-- Sequential and logical: Guide the reader through information or steps in a clear, logical sequence.
-- Steady flow: Ensure a smooth flow of information, transitioning seamlessly from one point to the next.
-- Precision: Be very precise with data presentation, do not message any data.
-- Dosage: Always provide clear dosage if available, in a logical and easy-to-read manner. Give the exact amount needed and for how many days.
-- External web links: Use links sparingly and only when really needed, but when you do make sure you actually include them. Only allowed external links in this case are: nice.org.uk and BNF.nice.org.uk .
-- Presentation: Try your best to present information in bullet form and/or table form when necessary. Try to avoid long paragraphs of text.
-- Data accuracy: In no circumstance give incorrect data. The most important thing is to present accurate data given the knowledge base.
 `,
     });
 
-    //     const prompt = `
-    // You are a helpful assistant. Answer the question below using only the context provided.
-
-    // Context:
-    // ${context}
-    // ${linksContext}
-
-    // Question:
-    // ${question}
-
-    // Answer:
-    // `;
-
-    // 10. Call OpenAI API with message history, context, and prompt
-    // const chatCompletion = await openai.chat.completions.create({
-    //   model: "gpt-4o",
-    //   messages: [
-    //     { role: "system", content: "You are a PDF knowledge assistant." },
-    //     { role: "user", content: prompt },
-    //   ],
-    //   temperature: 0.2,
-    // });
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: openAiMessages,
