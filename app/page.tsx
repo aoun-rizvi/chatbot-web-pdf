@@ -81,6 +81,18 @@ export default function PdfChat() {
     addDocumentsForPdfs();
   };
 
+  const TypingIndicator = () => {
+    return (
+      <div className="flex justify-center mb-2">
+        <div className="flex items-center space-x-1">
+          <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:0ms]"></span>
+          <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:200ms]"></span>
+          <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:400ms]"></span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white overflow-hidden">
       <Card className="py-2 w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none flex flex-col h-full">
@@ -100,8 +112,22 @@ export default function PdfChat() {
                       : "bg-slate-700 text-slate-400 text-left"
                       }`}
                   >
-                    <div className="prose prose-invert max-w-none">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <div className="prose prose-invert max-w-none [&_a]:text-cyan-400 [&_a:hover]:underline">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          a: ({ href, children }) => (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-cyan-400 hover:underline"
+                            >
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
                         {msg.content}
                       </ReactMarkdown>
                     </div>
@@ -113,6 +139,7 @@ export default function PdfChat() {
           </div>
 
           {/* Input section */}
+          {loading && <TypingIndicator />}
           <div className="pb-1 flex items-center gap-2">
             <Textarea
               value={input}
