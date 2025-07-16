@@ -5,7 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { addDocumentsForPdfs } from "@/lib/addDocumentsForPdfs";
+import { Region } from "@/enum/region"
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -16,6 +18,7 @@ import remarkGfm from "remark-gfm";
 
 
 export default function PdfChat() {
+  const [region, setRegion] = useState<Region>(Region.Derbyshire);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
@@ -34,22 +37,34 @@ export default function PdfChat() {
     setLoading(true);
     setInput("");
 
-    let res = await fetch("/api/pdf-category", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: input }),
-    });
-    let data = await res.json();
+    let res, data;
+    if (region === Region.Derbyshire) {
+      res = await fetch("/api/pdf-category", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: input }),
+      });
+      data = await res.json();
 
-    res = await fetch("/api/pdf-chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: input,
-        category: data.category,
-        history: messages,
-      }),
-    });
+      res = await fetch("/api/pdf-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: input,
+          category: data.category,
+          history: messages,
+        }),
+      });
+    } else {
+      res = await fetch("/api/chat-national", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: input,
+          history: messages,
+        }),
+      });
+    }
 
     data = await res.json();
     setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
@@ -140,7 +155,46 @@ export default function PdfChat() {
 
           {/* Input section */}
           {loading && <TypingIndicator />}
-          <div className="pb-1 flex items-center gap-2">
+          <div className="pb-1 flex items-center gap-2 w-full">
+            {/* Toggle Group */}
+            <ToggleGroup
+              type="single"
+              value={region}
+              onValueChange={(value) => {
+                if (value) setRegion(value as Region);
+              }}
+              className="flex flex-col justify-center h-24 rounded-md overflow-hidden gap-1"
+            >
+              <ToggleGroupItem
+                value={Region.Derbyshire}
+                className={`
+                  flex-1 w-full font-semibold text-sm transition cursor-pointer
+                  bg-cyan-700 text-black hover:bg-cyan-500
+                  data-[state=on]:bg-cyan-500
+                  data-[state=on]:text-white
+                  data-[state=on]:shadow-lg data-[state=on]:translate-y-[-2px]
+                  rounded-md
+                `}
+              >
+                {Region.Derbyshire}
+              </ToggleGroupItem>
+
+              <ToggleGroupItem
+                value={Region.National}
+                className={`
+                  flex-1 w-full font-semibold text-sm transition cursor-pointer
+                  bg-cyan-700 text-black hover:bg-cyan-500
+                  data-[state=on]:bg-cyan-500
+                  data-[state=on]:text-white
+                  data-[state=on]:shadow-lg data-[state=on]:translate-y-[-2px]
+                  rounded-md
+                `}
+              >
+                {Region.National}
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            {/* Textarea */}
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -148,14 +202,17 @@ export default function PdfChat() {
               className="flex-1 bg-slate-700 border-none text-white resize-none h-24"
               disabled={loading}
             />
+
+            {/* Ask Button */}
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-cyan-500 hover:bg-cyan-600"
+              className="bg-cyan-500 hover:bg-cyan-600 cursor-pointer"
             >
               {loading ? "..." : "Ask"}
             </Button>
           </div>
+          {/* Helper Buttons */}
           {/* <div className="flex flex-col gap-2">
             <Button onClick={updateFirestoreWithPdfs} disabled={loading}>
               PDF Config
