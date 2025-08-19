@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       - Precision: Be very precise with data presentation, do not message any data.
       - Dosage: Always provide clear dosage if available, in a logical and easy-to-read manner. Give the exact amount needed and for how many days.
       - External web links: Use links sparingly and only when really needed, but when you do make sure you actually include them. Only link to nice.org.uk or bnf.nice.org.uk if necessary.
-      - Presentation: Try your best to present information in bullet form and/or table form when necessary. Try to avoid long paragraphs of text.
+      - Presentation: Try your best to present information in table form. Try to avoid long paragraphs of text.
       - Data accuracy: In no circumstance give incorrect data. The most important thing is to present accurate data given the knowledge base.
       `,
     });
@@ -99,7 +99,9 @@ ${question}
       temperature: 0.2,
     });
 
-    const reply = chatCompletion.choices[0]?.message?.content || "No answer found.";
+    const raw = chatCompletion.choices[0]?.message?.content || "No answer found.";
+
+    const reply = normalizeToMarkdown(raw);
 
     return NextResponse.json({ reply });
   } catch (err: any) {
@@ -151,4 +153,13 @@ async function loadAllChunksFromFirestore(category: string): Promise<ChunkDocume
   }
 
   return allChunks;
+}
+
+function normalizeToMarkdown(s: string) {
+  // convert <br> to newlines
+  const withNewlines = s.replace(/<br\s*\/?>/gi, "\n");
+  // strip any remaining HTML tags (very basic sanitizer; keeps text)
+  const stripped = withNewlines.replace(/<\/?[^>]+(>|$)/g, "");
+  // trim extra blank lines
+  return stripped.replace(/\n{3,}/g, "\n\n").trim();
 }

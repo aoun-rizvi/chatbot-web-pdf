@@ -15,6 +15,7 @@ import remarkGfm from "remark-gfm";
 // When should you refer to secondary care for eczema
 // category should be: Skin
 // What should i do for a chronic diarrhea patient
+// Elderly patient with heart failure. Showing symptoms of hypothyroidism. Subclinical hypothyroidism on their bloods, where possible, give information including symptoms and blood test results, which would prompt initiation of treatment
 
 
 export default function PdfChat() {
@@ -127,20 +128,42 @@ export default function PdfChat() {
                       : "bg-slate-700 text-slate-400 text-left"
                       }`}
                   >
-                    <div className="prose prose-invert max-w-none [&_a]:text-cyan-400 [&_a:hover]:underline">
+                    <div className="prose prose-invert max-w-none
+  [&_a]:text-cyan-400 [&_a:hover]:underline
+  [&_table]:w-full
+  [&_thead_th]:bg-slate-800
+  [&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2
+  [&_th]:text-left
+  [&_table]:border-collapse
+  [&_th]:border [&_td]:border [&_th]:border-slate-600 [&_td]:border-slate-700
+  [&_tbody_tr:nth-child(odd)]:bg-slate-800/40
+">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           a: ({ href, children }) => (
-                            <a
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-cyan-400 hover:underline"
-                            >
+                            <a href={href} target="_blank" rel="noopener noreferrer">
                               {children}
                             </a>
                           ),
+                          table: ({ children }) => (
+                            <table className="w-full border-collapse">{children}</table>
+                          ),
+                          thead: ({ children }) => <thead className="sticky top-0">{children}</thead>,
+                          th: ({ children }) => (
+                            <th className="border border-slate-600 bg-slate-800 px-3 py-2 text-left">
+                              {children}
+                            </th>
+                          ),
+                          td: ({ children }) => (
+                            <td className="border border-slate-700 px-3 py-2 align-top">{children}</td>
+                          ),
+                          tr: ({ children }) => <tr className="odd:bg-slate-800/40">{children}</tr>,
+                          // Optional: tighter lists
+                          ul: ({ children }) => <ul className="list-disc pl-6 space-y-1">{children}</ul>,
+                          ol: ({ children }) => <ol className="list-decimal pl-6 space-y-1">{children}</ol>,
+                          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                          p: ({ children }) => <p className="leading-relaxed">{children}</p>,
                         }}
                       >
                         {msg.content}
