@@ -178,62 +178,55 @@ export default function PdfChat() {
 
           {/* Input section */}
           {loading && <TypingIndicator />}
-          <div className="pb-1 flex items-center gap-2 w-full">
-            {/* Toggle Group */}
+          <div className="w-full space-y-2">
+            {/* Derbyshire/National row — full width, equal space per button */}
             <ToggleGroup
               type="single"
               value={region}
               onValueChange={(value) => {
                 if (value) setRegion(value as Region);
               }}
-              className="flex flex-col justify-center h-24 rounded-md overflow-hidden gap-1"
+              className="grid grid-cols-2 gap-2 w-full"
             >
               <ToggleGroupItem
                 value={Region.Derbyshire}
-                className={`
-                  flex-1 w-full font-semibold text-sm transition cursor-pointer
-                  bg-cyan-700 text-black hover:bg-cyan-500
-                  data-[state=on]:bg-cyan-500
-                  data-[state=on]:text-white
-                  data-[state=on]:shadow-lg data-[state=on]:translate-y-[-2px]
-                  rounded-md
-                `}
+                className="w-full font-semibold text-sm transition cursor-pointer
+                 bg-cyan-700 text-black hover:bg-cyan-500
+                 data-[state=on]:bg-cyan-500 data-[state=on]:text-white
+                 data-[state=on]:shadow-lg rounded-md justify-center"
+                aria-label="Derbyshire"
               >
                 {Region.Derbyshire}
               </ToggleGroupItem>
-
               <ToggleGroupItem
                 value={Region.National}
-                className={`
-                  flex-1 w-full font-semibold text-sm transition cursor-pointer
-                  bg-cyan-700 text-black hover:bg-cyan-500
-                  data-[state=on]:bg-cyan-500
-                  data-[state=on]:text-white
-                  data-[state=on]:shadow-lg data-[state=on]:translate-y-[-2px]
-                  rounded-md
-                `}
+                className="w-full font-semibold text-sm transition cursor-pointer
+                 bg-cyan-700 text-black hover:bg-cyan-500
+                 data-[state=on]:bg-cyan-500 data-[state=on]:text-white
+                 data-[state=on]:shadow-lg rounded-md justify-center"
+                aria-label="National"
               >
                 {Region.National}
               </ToggleGroupItem>
             </ToggleGroup>
 
-            {/* Textarea */}
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask me anything..."
-              className="flex-1 bg-slate-700 border-none text-white resize-none h-24"
-              disabled={loading}
-            />
-
-            {/* Ask Button */}
-            <Button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="bg-cyan-500 hover:bg-cyan-600 cursor-pointer"
-            >
-              {loading ? "..." : "Ask"}
-            </Button>
+            {/* Textarea + Ask button row */}
+            <div className="flex flex-col gap-2 w-full">
+              <Textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask me anything..."
+                className="flex-1 bg-slate-700 border-none text-white resize-none h-24"
+                disabled={loading}
+              />
+              <Button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="w-full bg-cyan-500 hover:bg-cyan-600 cursor-pointer"
+              >
+                {loading ? "..." : "Ask"}
+              </Button>
+            </div>
           </div>
           {/* Helper Buttons */}
           {/* <div className="flex flex-col gap-2">
@@ -248,6 +241,4 @@ export default function PdfChat() {
       </Card>
     </div>
   );
-
-
 }
