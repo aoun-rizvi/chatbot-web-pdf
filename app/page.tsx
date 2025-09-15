@@ -10,6 +10,7 @@ import { addDocumentsForPdfs } from "@/lib/addDocumentsForPdfs";
 import { Region } from "@/enum/region"
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 
 // When should you refer to secondary care for eczema
@@ -110,90 +111,94 @@ export default function PdfChat() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-700 p-4 text-white overflow-hidden">
-      <Card className="py-2 w-full max-w-3xl shadow-xl rounded-2xl bg-slate-800 border-none flex flex-col h-full">
-        <CardContent className="px-2 flex flex-col flex-1 overflow-hidden">
-          {/* Header */}
-          <h1 className="text-3xl font-bold mb-4 text-center text-cyan-400">Medical AI Assistant</h1>
+    <div className="min-h-dvh sm:h-dvh flex items-center justify-center
+                bg-slate-50 dark:bg-slate-900
+                text-slate-900 dark:text-white
+                p-2 sm:p-3 overflow-hidden">
+
+      <Card className="w-full max-w-3xl h-full rounded-2xl shadow-xl
+                   bg-white dark:bg-slate-800
+                   border border-slate-200 dark:border-slate-700/60 py-2">
+        <CardContent className="flex flex-col h-full px-2 sm:px-2 md:px-2 py-0 overflow-hidden">
+
+          {/* Header with theme toggle */}
+          <header className="mb-3 sm:mb-4 flex items-center justify-between">
+            <h1 className="text-2xl sm:text-3xl font-bold select-none
+                       text-cyan-700 dark:text-cyan-400">
+              Medical AI Assistant
+            </h1>
+            {/* Optional: keep/remove your theme toggle component */}
+            <ThemeToggle />
+          </header>
 
           {/* Scrollable message area */}
-          <div className="flex-1 overflow-hidden mb-4">
-            <ScrollArea className="h-full px-3">
+          <section className="flex-1 min-h-0 overflow-hidden mb-3 sm:mb-4">
+            <ScrollArea className="h-full px-2 sm:px-3" aria-label="Chat messages">
               <div className="space-y-3">
-                {messages.map((msg, i) => (
-                  <div
-                    key={i}
-                    className={`p-3 rounded-md ${msg.role === "user"
-                      ? "bg-cyan-700 text-slate-900 text-right"
-                      : "bg-slate-700 text-slate-400 text-left"
-                      }`}
-                  >
-                    <div className="prose prose-invert max-w-none
-  [&_a]:text-cyan-400 [&_a:hover]:underline
-  [&_table]:w-full
-  [&_thead_th]:bg-slate-800
-  [&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2
-  [&_th]:text-left
-  [&_table]:border-collapse
-  [&_th]:border [&_td]:border [&_th]:border-slate-600 [&_td]:border-slate-700
-  [&_tbody_tr:nth-child(odd)]:bg-slate-800/40
-">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          a: ({ href, children }) => (
-                            <a href={href} target="_blank" rel="noopener noreferrer">
-                              {children}
-                            </a>
-                          ),
-                          table: ({ children }) => (
-                            <table className="w-full border-collapse">{children}</table>
-                          ),
-                          thead: ({ children }) => <thead className="sticky top-0">{children}</thead>,
-                          th: ({ children }) => (
-                            <th className="border border-slate-600 bg-slate-800 px-3 py-2 text-left">
-                              {children}
-                            </th>
-                          ),
-                          td: ({ children }) => (
-                            <td className="border border-slate-700 px-3 py-2 align-top">{children}</td>
-                          ),
-                          tr: ({ children }) => <tr className="odd:bg-slate-800/40">{children}</tr>,
-                          // Optional: tighter lists
-                          ul: ({ children }) => <ul className="list-disc pl-6 space-y-1">{children}</ul>,
-                          ol: ({ children }) => <ol className="list-decimal pl-6 space-y-1">{children}</ol>,
-                          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                          p: ({ children }) => <p className="leading-relaxed">{children}</p>,
-                        }}
+                {messages.map((msg, i) => {
+                  const isUser = msg.role === "user";
+                  return (
+                    <div key={i} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+                      <div
+                        className={[
+                          "max-w-[90%] sm:max-w-[85%] md:max-w-[80%]",
+                          "p-3 rounded-lg shadow-sm ring-1 transition-colors",
+                          isUser
+                            ? "bg-cyan-600 ring-cyan-500 text-white"
+                            : "bg-slate-100 ring-slate-200 text-slate-900 dark:bg-slate-700 dark:ring-slate-700 dark:text-slate-100",
+                        ].join(" ")}
+                        role="group"
+                        aria-label={isUser ? "User message" : "Assistant message"}
                       >
-                        {msg.content}
-                      </ReactMarkdown>
+                        {/* Markdown content (kept functional) */}
+                        <div className="prose prose-slate dark:prose-invert max-w-none
+                                    [&_a]:text-cyan-700 dark:[&_a]:text-cyan-300 [&_a:hover]:underline
+                                    [&_table]:w-full [&_table]:border-collapse
+                                    [&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2 text-sm
+                                    [&_th]:text-left
+                                    [&_th]:border [&_td]:border
+                                    [&_th]:border-slate-200 [&_td]:border-slate-200
+                                    dark:[&_th]:border-slate-600 dark:[&_td]:border-slate-700
+                                    [&_tbody_tr:nth-child(odd)]:bg-slate-50
+                                    dark:[&_tbody_tr:nth-child(odd)]:bg-slate-800/40">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {msg.content}
+                          </ReactMarkdown>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 <div ref={scrollRef} />
               </div>
             </ScrollArea>
-          </div>
+          </section>
 
-          {/* Input section */}
-          {loading && <TypingIndicator />}
-          <div className="w-full space-y-2">
+          {loading && (
+            <div className="flex justify-center mb-2" aria-label="Assistant is typing">
+              <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:0ms]" />
+              <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:200ms] ml-1" />
+              <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:400ms] ml-1" />
+            </div>
+          )}
+
+          {/* Controls */}
+          <section className="w-full">
+
             {/* Derbyshire/National row — full width, equal space per button */}
             <ToggleGroup
               type="single"
               value={region}
-              onValueChange={(value) => {
-                if (value) setRegion(value as Region);
-              }}
-              className="grid grid-cols-2 gap-2 w-full"
+              onValueChange={(value) => value && setRegion(value as Region)}
+              className="grid grid-cols-2 gap-2 w-full mb-2"
+              aria-label="Select guidance source"
             >
               <ToggleGroupItem
                 value={Region.Derbyshire}
                 className="w-full font-semibold text-sm transition cursor-pointer
-                 bg-cyan-700 text-black hover:bg-cyan-500
-                 data-[state=on]:bg-cyan-500 data-[state=on]:text-white
-                 data-[state=on]:shadow-lg rounded-md justify-center"
+                       bg-cyan-700 text-black hover:bg-cyan-600
+                       data-[state=on]:bg-cyan-600 data-[state=on]:text-white
+                       data-[state=on]:shadow"
                 aria-label="Derbyshire"
               >
                 {Region.Derbyshire}
@@ -201,42 +206,39 @@ export default function PdfChat() {
               <ToggleGroupItem
                 value={Region.National}
                 className="w-full font-semibold text-sm transition cursor-pointer
-                 bg-cyan-700 text-black hover:bg-cyan-500
-                 data-[state=on]:bg-cyan-500 data-[state=on]:text-white
-                 data-[state=on]:shadow-lg rounded-md justify-center"
+                       bg-cyan-700 text-black hover:bg-cyan-600
+                       data-[state=on]:bg-cyan-600 data-[state=on]:text-white
+                       data-[state=on]:shadow"
                 aria-label="National"
               >
                 {Region.National}
               </ToggleGroupItem>
             </ToggleGroup>
 
-            {/* Textarea + Ask button row */}
+            {/* Textarea + Ask button (Ask is full width below input) */}
             <div className="flex flex-col gap-2 w-full">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything..."
-                className="flex-1 bg-slate-700 border-none text-white resize-none h-24"
+                className="flex-1 h-24 resize-none
+                       bg-slate-200 border border-slate-400 text-slate-900
+                       dark:bg-slate-700 dark:border-slate-700 dark:text-slate-100"
                 disabled={loading}
+                aria-label="Message input"
               />
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-cyan-500 hover:bg-cyan-600 cursor-pointer"
+                className="w-full font-semibold cursor-pointer
+                       bg-cyan-600 hover:bg-cyan-700 text-white
+                       disabled:opacity-60 disabled:cursor-not-allowed"
+                aria-label="Send message"
               >
                 {loading ? "..." : "Ask"}
               </Button>
             </div>
-          </div>
-          {/* Helper Buttons */}
-          {/* <div className="flex flex-col gap-2">
-            <Button onClick={updateFirestoreWithPdfs} disabled={loading}>
-              PDF Config
-            </Button>
-            <Button onClick={handleEmbed} disabled={loading}>
-              PDF Embedding
-            </Button>
-          </div> */}
+          </section>
         </CardContent>
       </Card>
     </div>
