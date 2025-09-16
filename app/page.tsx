@@ -112,20 +112,19 @@ export default function PdfChat() {
 
   return (
     <div className="h-dvh flex items-stretch sm:items-center justify-center
-    bg-slate-50 dark:bg-slate-900
-    text-slate-900 dark:text-white
-      p-2 sm:p-3 overflow-hidden"
+      bg-slate-50 dark:bg-slate-900
+      text-slate-900 dark:text-white
+        p-2 sm:p-3 overflow-hidden"
     >
       <Card className="w-full max-w-3xl h-full rounded-2xl shadow-xl
-      bg-white dark:bg-slate-800
-        border border-slate-200 dark:border-slate-700/60 py-2"
+        bg-white dark:bg-slate-800
+          border border-slate-200 dark:border-slate-700/60 py-2"
       >
         <CardContent className="flex flex-col h-full px-2 sm:px-2 md:px-2 py-0 overflow-hidden">
           {/* Header with theme toggle */}
           <header className="mb-3 sm:mb-4 flex items-center justify-between">
-            <h1 className="text-2xl sm:text-3xl font-bold select-none
-                       text-cyan-700 dark:text-cyan-400">
-              Medical AI Assistant
+            <h1 className="text-2xl sm:text-3xl font-bold select-none text-cyan-700 dark:text-cyan-400">
+              Medi Milo - AI Assistant
             </h1>
             {/* Optional: keep/remove your theme toggle component */}
             <ThemeToggle />
