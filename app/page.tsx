@@ -11,6 +11,7 @@ import { Region } from "@/enum/region"
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Image from "next/image";
 
 
 // When should you refer to secondary care for eczema
@@ -125,11 +126,20 @@ export default function PdfChat() {
         <CardContent className="flex flex-col h-full px-2 sm:px-2 md:px-2 py-0 overflow-hidden">
           {/* Header with theme toggle */}
           <header className="mb-3 sm:mb-4 flex items-center justify-between">
-            {/* Replace navy with a warm mocha drawn from the dog's ear/paw shadows */}
-            <h1 className="text-2xl sm:text-3xl font-bold select-none
-                           text-[#8B5E3C] dark:text-[#D7A978]">
-              Medi Milo - AI Assistant
-            </h1>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/assets/dog.jpg"
+                alt="Medi Milo - AI Assistant"
+                width={40}
+                height={40}
+                className="rounded-full w-8 h-8 sm:w-10 sm:h-10 object-cover"
+                sizes="(max-width: 640px) 32px, 40px"
+                priority
+              />
+              <h1 className="text-2xl sm:text-3xl font-bold select-none text-[#8B5E3C] dark:text-[#D7A978]">
+                Medi Milo - AI Assistant
+              </h1>
+            </div>
             <ThemeToggle />
           </header>
 
