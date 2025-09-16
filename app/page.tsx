@@ -114,14 +114,14 @@ export default function PdfChat() {
   return (
     <div
       className="h-dvh flex items-stretch sm:items-center justify-center
-                 bg-slate-50 dark:bg-slate-900
-                 text-slate-900 dark:text-white
-                 p-2 sm:p-3 overflow-hidden"
+             bg-[#FFF6EC] dark:bg-slate-900
+             text-slate-900 dark:text-white
+             p-2 sm:p-3 overflow-hidden"
     >
       <Card
         className="w-full max-w-3xl h-full rounded-2xl shadow-xl
-                   bg-white dark:bg-slate-800
-                   border border-slate-200 dark:border-slate-700/60 py-2"
+               bg-[#FAE9D2] dark:bg-slate-800
+               border border-[#EED9C4] dark:border-slate-700/60 py-2"
       >
         <CardContent className="flex flex-col h-full px-2 sm:px-2 md:px-2 py-0 overflow-hidden">
           {/* Header with theme toggle */}
@@ -159,10 +159,9 @@ export default function PdfChat() {
                           "max-w-[90%] sm:max-w-[85%] md:max-w-[80%]",
                           "p-3 rounded-lg shadow-sm ring-1 transition-colors",
                           isUser
-                            // user bubble → rich caramel in light, golden-tan in dark
                             ? "bg-[#C98A5B] ring-[#B97D51] text-white dark:bg-[#E6B980] dark:ring-[#D7A978] dark:text-slate-900"
-                            // assistant bubble stays neutral
-                            : "bg-slate-100 ring-slate-200 text-slate-900 dark:bg-slate-700 dark:ring-slate-700 dark:text-slate-100",
+                            // ⬇️ UPDATED: light mode uses a slightly different dog-inspired cream than the textarea
+                            : "bg-[#F1D6B8] ring-[#E6CCB3] text-slate-900 dark:bg-slate-700 dark:ring-slate-700 dark:text-slate-100",
                         ].join(" ")}
                         role="group"
                         aria-label={isUser ? "User message" : "Assistant message"}
@@ -236,10 +235,11 @@ export default function PdfChat() {
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me anything..."
+                placeholder="Let's play fetch! You ask a question and I fetch the answer!"
                 className="flex-1 h-24 resize-none
-                           bg-slate-200 border border-slate-400 text-slate-900
-                           dark:bg-slate-700 dark:border-slate-700 dark:text-slate-100"
+             bg-[#F9EFDF] border border-[#EED9C4] text-slate-900
+             placeholder:text-slate-500
+             dark:bg-slate-700 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400"
                 disabled={loading}
                 aria-label="Message input"
               />
