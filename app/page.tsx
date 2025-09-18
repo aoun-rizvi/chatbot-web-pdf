@@ -12,6 +12,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { Paperclip } from "lucide-react";
+import { toast } from "sonner";
 
 
 // When should you refer to secondary care for eczema
@@ -25,15 +28,23 @@ export default function PdfChat() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Track which object URLs are already committed to the chat history,
+  // so we never revoke those (keeps old images visible until page refresh)
+  const committedObjectUrls = useRef<Set<string>>(new Set());
+  // Place this near your Ask textarea/button block
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const askButtonRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = async () => {
+  const questionSubmit = async () => {
     if (!input.trim()) return;
     const newMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, newMsg]);
@@ -72,6 +83,54 @@ export default function PdfChat() {
     data = await res.json();
     setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
     setLoading(false);
+  };
+
+  // Single entry point: clicking the button opens the picker
+  const onClickDiagnose = () => fileInputRef.current?.click();
+
+  // File picked → validate → append image to chat → call API → append diagnosis
+  const imageSubmit: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const file = e.target.files?.[0] ?? null;
+    // allow re-selecting the same file later
+    e.target.value = "";
+
+    if (!file) return;
+
+    const okTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!okTypes.includes(file.type)) {
+      toast.error('Please upload a PNG or JPEG image.')
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error('Image too large. Keep it under 8MB.')
+      return;
+    }
+
+    // Create an object URL and commit it to the chat history (so it stays visible this session)
+    const url = URL.createObjectURL(file);
+    committedObjectUrls.current.add(url);
+
+    // Show the image immediately in the chat as a user message
+    const imageMsg = { role: "user", content: `![uploaded image](${url})` };
+    setMessages((prev) => [...prev, imageMsg]);
+
+    // Send to backend for diagnosis
+    setLoading(true);
+    try {
+      const form = new FormData();
+      form.append("image", file);
+      // form.append("region", region);
+      // form.append("history", JSON.stringify([...messages, imageMsg]));
+
+      const res = await fetch("/api/image-diagnose", { method: "POST", body: form });
+      const data = await res.json();
+
+      setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
+    } catch {
+      setMessages((prev) => [...prev, { role: "bot", content: "Sorry—there was a problem analyzing the image." }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleQuestionCategory = async () => {
@@ -179,7 +238,41 @@ export default function PdfChat() {
                                      [&_tbody_tr:nth-child(odd)]:bg-slate-50
                                      dark:[&_tbody_tr:nth-child(odd)]:bg-slate-800/40"
                         >
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+
+                            // ✅ v9+: allow all URLs (including blob:/data:) instead of sanitizing them
+                            urlTransform={(url) => url}
+
+                            components={{
+                              // Render a plain <img> so blob:/data: sources work
+                              img: ({ node, ...props }) => (
+                                <img
+                                  {...props}
+                                  className="max-w-full h-auto rounded-md"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              ),
+                              a: ({ href, children }) => (
+                                <a href={href as string} target="_blank" rel="noopener noreferrer">
+                                  {children}
+                                </a>
+                              ),
+                              table: ({ children }) => <table className="w-full border-collapse">{children}</table>,
+                              thead: ({ children }) => <thead className="sticky top-0">{children}</thead>,
+                              th: ({ children }) => (
+                                <th className="border border-slate-600 bg-slate-800 px-3 py-2 text-left">{children}</th>
+                              ),
+                              td: ({ children }) => (
+                                <td className="border border-slate-700 px-3 py-2 align-top">{children}</td>
+                              ),
+                              tr: ({ children }) => <tr className="odd:bg-slate-800/40">{children}</tr>,
+                              ul: ({ children }) => <ul className="list-disc pl-6 space-y-1">{children}</ul>,
+                              ol: ({ children }) => <ol className="list-decimal pl-6 space-y-1">{children}</ol>,
+                              p: ({ children }) => <p className="leading-relaxed">{children}</p>,
+                            }}
+                          >
                             {msg.content}
                           </ReactMarkdown>
                         </div>
@@ -242,19 +335,72 @@ export default function PdfChat() {
              dark:bg-slate-700 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400"
                 disabled={loading}
                 aria-label="Message input"
+                onKeyDown={(e) => {
+                  if (e.key === "Tab" && !e.shiftKey) {
+                    e.preventDefault();                 // stop native tabbing
+                    askButtonRef.current?.focus();         // send focus to Ask
+                  }
+                }}
               />
-              <Button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full font-semibold cursor-pointer
-                           bg-[#C98A5B] hover:bg-[#B97D51] text-white
-                           dark:bg-[#E6B980] dark:hover:bg-[#D7A978] dark:text-slate-900
-                           disabled:opacity-60 disabled:cursor-not-allowed"
-                aria-label="Send message"
-              >
-                {loading ? "..." : "Ask"}
-              </Button>
             </div>
+
+            {/* Hidden file input (no preview UI) */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg"
+              className="sr-only"
+              onChange={imageSubmit}
+            />
+
+            {/* One button that both picks and sends immediately */}
+            <TooltipProvider delayDuration={150}>
+              <div className="w-full flex flex-row flex-nowrap items-stretch gap-2 pt-2">
+                {/* Ask — expands to fill remaining width */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      ref={askButtonRef}
+                      onClick={questionSubmit}
+                      disabled={loading}
+                      aria-label="Send message"
+                      title="Send message"
+                      className="min-w-0 flex-1 font-semibold cursor-pointer
+                     bg-[#C98A5B] hover:bg-[#B97D51] text-white
+                     dark:bg-[#E6B980] dark:hover:bg-[#D7A978] dark:text-slate-900
+                     disabled:opacity-60 disabled:cursor-not-allowed"
+
+                    >
+                      {loading ? "..." : "Ask"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Send message</TooltipContent>
+                </Tooltip>
+
+
+                {/* Attach (icon-only) — fixed width; stays right */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      onClick={onClickDiagnose}
+                      disabled={loading}
+                      tabIndex={-1}
+                      aria-label="Attach image"
+                      title="Attach image"
+                      variant="outline"
+                      className="shrink-0 px-3 sm:px-4 cursor-pointer
+                     border-[#EED9C4] text-[#5B3B28] hover:bg-[#F6E2CB]
+                     dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
+                    >
+                      <Paperclip className="h-5 w-5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Attach image</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+
           </section>
         </CardContent>
       </Card>
