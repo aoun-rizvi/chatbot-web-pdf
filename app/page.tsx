@@ -211,7 +211,7 @@ export default function PdfChat() {
                   return (
                     <div
                       key={i}
-                      className={`flex ${isUser ? "justify-end" : "justify-start"}`}
+                      className={`flex ${isUser ? "justify-end mr-4 sm:mr-0" : "justify-start"}`}
                     >
                       <div
                         className={[
@@ -219,7 +219,6 @@ export default function PdfChat() {
                           "p-3 rounded-lg shadow-sm ring-1 transition-colors",
                           isUser
                             ? "bg-[#C98A5B] ring-[#B97D51] text-white dark:bg-[#E6B980] dark:ring-[#D7A978] dark:text-slate-900"
-                            // ⬇️ UPDATED: light mode uses a slightly different dog-inspired cream than the textarea
                             : "bg-[#F1D6B8] ring-[#E6CCB3] text-slate-900 dark:bg-slate-700 dark:ring-slate-700 dark:text-slate-100",
                         ].join(" ")}
                         role="group"
@@ -259,7 +258,16 @@ export default function PdfChat() {
                                   {children}
                                 </a>
                               ),
-                              table: ({ children }) => <table className="w-full border-collapse">{children}</table>,
+                              // table: ({ children }) => <table className="w-full border-collapse">{children}</table>,
+                              table: ({ children }) => (
+                                <div
+                                  className="max-w-[300px] sm:max-w-[500px] md:max-w-[600px] overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable]"
+                                >
+                                  <table className="min-w-max border-collapse">
+                                    {children}
+                                  </table>
+                                </div>
+                              ),
                               thead: ({ children }) => <thead className="sticky top-0">{children}</thead>,
                               th: ({ children }) => (
                                 <th className="border border-slate-600 bg-slate-800 px-3 py-2 text-left">{children}</th>
