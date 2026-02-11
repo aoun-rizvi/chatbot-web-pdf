@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
     const response = await openai.responses.create({
       model: "gpt-5-nano",
       // temperature: 0.2,
-      service_tier: "auto",
-      reasoning: { effort: "low" },
+      service_tier: "priority",
+      reasoning: { effort: "minimal" },
       // max_output_tokens: 250,
       instructions: systemInstructions,
       input: [

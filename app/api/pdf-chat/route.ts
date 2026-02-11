@@ -96,8 +96,8 @@ ${question}
     const response = await openai.responses.create({
       model: "gpt-5-nano",
       // temperature: 0.2,
-      service_tier: "auto",
-      reasoning: { effort: "low" },
+      service_tier: "priority",
+      reasoning: { effort: "minimal" },
       text: { verbosity: "medium" },
       // max_output_tokens: 250,
       input: openAiMessages
