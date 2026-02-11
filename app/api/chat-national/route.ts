@@ -83,7 +83,7 @@ ${question}
       service_tier: "priority",
       reasoning: { effort: "minimal" },
       text: { verbosity: "low" },
-      max_output_tokens: 250,
+      // max_output_tokens: 250,
       input: openAiMessages
     });
 

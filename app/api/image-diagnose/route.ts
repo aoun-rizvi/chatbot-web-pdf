@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       // temperature: 0.2,
       service_tier: "priority",
       reasoning: { effort: "minimal" },
-      max_output_tokens: 250,
+      // max_output_tokens: 250,
       instructions: systemInstructions,
       input: [
         {
