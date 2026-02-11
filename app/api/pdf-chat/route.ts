@@ -98,7 +98,7 @@ ${question}
       // temperature: 0.2,
       service_tier: "auto",
       reasoning: { effort: "low" },
-      text: { verbosity: "low" },
+      text: { verbosity: "medium" },
       // max_output_tokens: 250,
       input: openAiMessages
     });

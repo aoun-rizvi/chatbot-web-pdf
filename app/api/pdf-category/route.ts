@@ -35,7 +35,7 @@ Answer: As an answer just give me the name of the category, nothing else.
       // temperature: 0.2,
       service_tier: "auto",
       reasoning: { effort: "low" },
-      text: { verbosity: "low" },
+      text: { verbosity: "medium" },
       // max_output_tokens: 250,
       input: [
         {
