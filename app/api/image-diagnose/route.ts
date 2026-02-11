@@ -24,11 +24,7 @@ export async function POST(req: NextRequest) {
     const b64 = Buffer.from(ab).toString("base64");
     const dataUrl = `data:${file.type};base64,${b64}`;
 
-    const openAiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
-
-    openAiMessages.unshift({
-      role: "system",
-      content: `
+    const systemInstructions = `
       You are a helpful medical image reasoning assistant.
 
       Guidelines:
@@ -42,25 +38,26 @@ export async function POST(req: NextRequest) {
       - Dosage: Always provide clear dosage if available, in a logical and easy-to-read manner. Give the exact amount needed and for how many days.
       - Presentation: Try your best to present information in table form. Try to avoid long paragraphs of text.
       - Data accuracy: In no circumstance give incorrect data. The most important thing is to present accurate data given the knowledge base.
-      `,
-    });
+      `.trim();
 
     const question = "Identify the most likely condition shown in this image and key differentials. Give dosage and treatment information. Explain briefly.";
-    openAiMessages.push({
-      role: "user",
-      content: [
-        { type: "text", text: `Question:\n${question}` },
-        { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
-      ],
+
+    const response = await openai.responses.create({
+      model: "gpt-5-nano",
+      // temperature: 0.2,
+      instructions: systemInstructions,
+      input: [
+        {
+          role: "user",
+          content: [
+            { type: "input_text", text: `Question:\n${question}` },
+            { type: "input_image", image_url: dataUrl, detail: "high" },
+          ],
+        },
+      ]
     });
 
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: openAiMessages,
-      temperature: 0.2,
-    });
-
-    const raw = chatCompletion.choices[0]?.message?.content?.trim() || "No answer found.";
+    const raw = response.output_text || "No answer found.";
 
     const reply = normalizeToMarkdown(raw);
 

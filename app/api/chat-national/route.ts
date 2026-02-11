@@ -77,13 +77,13 @@ ${question}
 `,
     });
 
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: openAiMessages,
-      temperature: 0.2,
+    const response = await openai.responses.create({
+      model: "gpt-5-nano",
+      // temperature: 0.2,
+      input: openAiMessages
     });
 
-    const reply = chatCompletion.choices[0]?.message?.content || "No answer found.";
+    const reply = response.output_text || "No answer found.";
 
     return NextResponse.json({ reply });
   } catch (err: any) {

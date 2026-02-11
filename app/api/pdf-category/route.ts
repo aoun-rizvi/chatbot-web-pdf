@@ -30,16 +30,26 @@ ${question}
 Answer: As an answer just give me the name of the category, nothing else.
 `;
 
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: "You are a knowledgeable assistant." },
-        { role: "user", content: prompt },
-      ],
-      temperature: 0.2,
+    const response = await openai.responses.create({
+      model: "gpt-5-nano",
+      // temperature: 0.2,
+      input: [
+        {
+          role: "system",
+          content: [
+            { type: "input_text", text: "You are a knowledgeable assistant." }
+          ]
+        },
+        {
+          role: "user",
+          content: [
+            { type: "input_text", text: prompt }
+          ]
+        }
+      ]
     });
 
-    const reply = chatCompletion.choices[0]?.message?.content || "No answer found.";
+    const reply = response.output_text || "No answer found.";
     const category = Category.getSlug(reply);
 
     return NextResponse.json({ category });
