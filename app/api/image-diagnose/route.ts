@@ -42,6 +42,40 @@ export async function POST(req: NextRequest) {
 
     const question = "Identify the most likely condition shown in this image and key differentials. Give dosage and treatment information. Explain briefly.";
 
+    // 1) FAST PATH: gpt-4o (Chat Completions)
+    try {
+      console.warn("Using gpt-4o")
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: systemInstructions },
+          {
+            role: "user",
+            content: [
+              { type: "text", text: `Question:\n${question}` },
+              { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
+            ],
+          },
+        ],
+        temperature: 0.2,
+      });
+
+      const raw = chatCompletion.choices[0]?.message?.content?.trim() || "No answer found.";
+      const reply = normalizeToMarkdown(raw);
+
+      return NextResponse.json({ reply }, { status: 200 });
+    } catch (err: any) {
+      // Log + fall back
+      console.warn("gpt-4o failed, falling back to gpt-5-nano:", {
+        message: err?.message,
+        status: err?.status,
+        code: err?.code,
+        type: err?.type,
+      });
+    }
+    console.warn("Using gpt-5-nano")
+
+    // 2) FALLBACK: gpt-5-nano (Responses API)
     const response = await openai.responses.create({
       model: "gpt-5-nano",
       // temperature: 0.2,
@@ -61,7 +95,6 @@ export async function POST(req: NextRequest) {
     });
 
     const raw = response.output_text || "No answer found.";
-
     const reply = normalizeToMarkdown(raw);
 
     return NextResponse.json({ reply }, { status: 200 });

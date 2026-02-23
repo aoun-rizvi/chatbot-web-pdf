@@ -93,6 +93,31 @@ ${question}
 `,
     });
 
+    // 1) FAST PATH: gpt-4o (Chat Completions)
+    try {
+      console.warn("Using gpt-4o")
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: openAiMessages,
+        temperature: 0.2,
+      });
+
+      const raw = chatCompletion.choices[0]?.message?.content || "No answer found.";
+      const reply = normalizeToMarkdown(raw);
+
+      return NextResponse.json({ reply });
+    } catch (err: any) {
+      // Log + fall back
+      console.warn("gpt-4o failed, falling back to gpt-5-nano:", {
+        message: err?.message,
+        status: err?.status,
+        code: err?.code,
+        type: err?.type,
+      });
+    }
+    console.warn("Using gpt-5-nano")
+
+    // 2) FALLBACK: gpt-5-nano (Responses API)
     const response = await openai.responses.create({
       model: "gpt-5-nano",
       // temperature: 0.2,
@@ -104,7 +129,6 @@ ${question}
     });
 
     const raw = response.output_text || "No answer found.";
-
     const reply = normalizeToMarkdown(raw);
 
     return NextResponse.json({ reply });
