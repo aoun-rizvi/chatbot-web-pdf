@@ -118,7 +118,7 @@ chatbot-web-pdf/
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/Web-Knitters/chatbot-web-pdf.git
+git clone https://github.com/aoun-rizvi/chatbot-web-pdf.git
 cd chatbot-web-pdf
 ```
 
