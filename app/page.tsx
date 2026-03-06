@@ -196,7 +196,7 @@ export default function PdfChat() {
                 priority
               />
               <h1 className="text-2xl sm:text-3xl font-bold select-none text-[#8B5E3C] dark:text-[#D7A978]">
-                Medi Milo - AI Assistant 3
+                Medi Milo - AI Assistant
               </h1>
             </div>
             <ThemeToggle />
