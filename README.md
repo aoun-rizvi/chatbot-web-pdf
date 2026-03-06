@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medi Milo – AI Medical Assistant (RAG Application)
 
-## Getting Started
+Medi Milo is an **AI-powered medical assistant** designed to help doctors quickly retrieve and understand medical information when diagnosing patients.
 
-First, run the development server:
+The application uses a **Retrieval-Augmented Generation (RAG)** architecture that combines a curated knowledge base with **OpenAI language models** to generate accurate, contextual responses to medical questions.
+
+Users can ask questions related to patient symptoms, medical conditions, or treatments, and the system retrieves relevant information from trusted sources before generating structured answers.
+
+🌐 **Live Application:**  
+https://www.medimilo.com
+
+---
+
+# Overview
+
+Healthcare professionals often need quick access to medical knowledge while treating patients. Searching through large documentation or medical PDFs can be time-consuming.
+
+Medi Milo solves this by combining:
+
+- Document retrieval
+- Semantic search
+- Large language models
+
+The system retrieves the most relevant medical information and uses an LLM to generate a **clear, contextual response grounded in trusted medical sources**.
+
+---
+
+# Architecture
+
+This project uses a **Retrieval-Augmented Generation (RAG)** architecture.
+
+High-level workflow:
+
+1. User submits a question
+2. The system retrieves relevant content from the knowledge base
+3. Relevant document chunks are sent to the LLM as context
+4. OpenAI generates a response grounded in the retrieved data
+5. The response is returned to the user
+
+User Question
+↓
+Semantic Search / Retrieval
+↓
+Relevant Document Chunks
+↓
+OpenAI LLM
+↓
+Contextual Response
+
+This approach reduces hallucinations and improves the reliability of answers.
+
+---
+
+# Tech Stack
+
+## Frontend
+- Next.js
+- TypeScript
+- TailwindCSS
+
+## Backend
+- Next.js API Routes
+
+## AI
+- OpenAI API (GPT models)
+
+## Database
+- Firebase
+
+## Retrieval
+- Document embeddings
+- Semantic search over PDF knowledge base
+
+---
+
+# Features
+
+- AI medical assistant for clinical questions
+- Retrieval-Augmented Generation (RAG)
+- PDF knowledge base ingestion
+- Semantic search over medical documents
+- Context-aware AI responses
+- Clean chat interface
+- Server-side API integration with OpenAI
+- Secure environment variable configuration
+
+---
+
+# Example Use Cases
+
+Doctors can ask questions such as:
+
+- What are possible causes of chronic cough?
+- How is type 2 diabetes diagnosed?
+- Recommended treatment for bacterial pneumonia?
+- Differential diagnosis for chest pain?
+
+The assistant retrieves relevant knowledge and generates contextual answers.
+
+---
+
+# Repository Structure
+chatbot-web-pdf/
+│
+├── app/ # Next.js app directory
+├── components/ # UI components
+├── lib/ # Utility and helper functions
+├── pages/api/ # API endpoints
+├── public/ # Static assets
+├── scripts/ # Data ingestion / document processing
+├── styles/ # Styling
+└── README.md
+
+---
+
+# Local Development
+
+## 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Web-Knitters/chatbot-web-pdf.git
+cd chatbot-web-pdf
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```npm install```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 3. Create environment variables
 
-## Learn More
+```
+OPENAI_API_KEY=your_openai_key
+FIREBASE_API_KEY=your_key
+FIREBASE_PROJECT_ID=your_project_id
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 4. Run the development server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```npm run dev```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 5. Open application
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```http://localhost:3000```
