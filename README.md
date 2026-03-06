@@ -129,14 +129,24 @@ cd chatbot-web-pdf
 ## 3. Create environment variables
 
 ```
+# OpenAI
 OPENAI_API_KEY=your_openai_key
-FIREBASE_API_KEY=your_key
-FIREBASE_PROJECT_ID=your_project_id
+
+# firebase
+NEXT_PUBLIC_FIREBASE_API_KEY="your-key"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-auth-domain"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-storage-bucket"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-sender-id"
+NEXT_PUBLIC_FIREBASE_APP_ID="your-app=id"
 ```
 
-## 4. Run the development server
+## 4. Build & run the development server
 
-```npm run dev```
+```
+npm run build
+npm run dev
+```
 
 ## 5. Open application
 
