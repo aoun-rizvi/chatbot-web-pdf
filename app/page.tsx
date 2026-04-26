@@ -13,7 +13,7 @@ import remarkGfm from "remark-gfm";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { Paperclip } from "lucide-react";
+import { Paperclip, X } from "lucide-react";
 import { toast } from "sonner";
 
 
@@ -28,6 +28,7 @@ export default function PdfChat() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
   );
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -406,12 +407,85 @@ export default function PdfChat() {
                   </TooltipTrigger>
                   <TooltipContent side="top">Attach image</TooltipContent>
                 </Tooltip>
+
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-3 text-center space-y-1">
+                <p className="text-xs text-[#8B5E3C]/70 dark:text-[#D7A978]/70">
+                  Not a substitute for clinical judgement.{" "}
+                  <button
+                    onClick={() => setShowDisclaimer(true)}
+                    className="underline hover:opacity-80"
+                  >
+                    Read More
+                  </button>
+                </p>
               </div>
             </TooltipProvider>
+
 
           </section>
         </CardContent>
       </Card>
+      {/* Disclaimer */}
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-[#FAE9D2] dark:bg-slate-800 shadow-2xl border border-[#EED9C4] dark:border-slate-700 p-6 relative">
+
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-4 right-4 text-[#8B5E3C] dark:text-[#D7A978] hover:opacity-70"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <h2 className="text-xl font-bold mb-4 text-[#8B5E3C] dark:text-[#D7A978]">
+              Disclaimer & Terms of Use
+            </h2>
+
+            <div className="space-y-4 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+              <p>
+                This platform is provided for informational and educational purposes only.
+                It is designed to assist qualified healthcare professionals by summarising
+                clinical guidance and offering general decision-support information.
+              </p>
+
+              <p>
+                It does not constitute medical advice and must not be relied upon as a
+                substitute for professional clinical judgement, independent verification,
+                or consultation of authoritative sources.
+              </p>
+
+              <p>
+                Users must exercise their own clinical expertise, judgement, and due
+                diligence when interpreting and applying any information generated.
+              </p>
+
+              <p>
+                Clinical decisions must be based on a comprehensive assessment of the
+                individual patient, current evidence-based guidance, national standards,
+                and applicable local policies.
+              </p>
+
+              <p>
+                Do not input patient-identifiable or confidential information. All data
+                entered should be fully anonymised.
+              </p>
+
+              <p>
+                No warranties are made regarding accuracy, completeness, reliability, or
+                currency of information provided.
+              </p>
+
+              <p>
+                By using this platform, you agree that sole responsibility for all
+                clinical decisions and patient outcomes rests with the treating clinician.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
