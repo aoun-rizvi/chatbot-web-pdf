@@ -45,6 +45,16 @@ export default function PdfChat() {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Show pop-up disclaimer only once for new users
+  useEffect(() => {
+    const hasSeenDisclaimer = localStorage.getItem("hasSeenClinicalDisclaimer");
+
+    if (!hasSeenDisclaimer) {
+      setShowDisclaimer(true);
+      localStorage.setItem("hasSeenClinicalDisclaimer", "true");
+    }
+  }, []);
+
   const questionSubmit = async () => {
     if (!input.trim()) return;
     const newMsg = { role: "user", content: input };
@@ -178,6 +188,7 @@ export default function PdfChat() {
              text-slate-900 dark:text-white
              p-2 sm:p-3 overflow-hidden"
     >
+      {/* AI Chatbot */}
       <Card
         className="w-full max-w-3xl h-full rounded-2xl shadow-xl
                bg-[#FAE9D2] dark:bg-slate-800
@@ -412,15 +423,18 @@ export default function PdfChat() {
 
               {/* Disclaimer */}
               <div className="mt-3 text-center space-y-1">
-                <p className="text-xs text-[#8B5E3C]/70 dark:text-[#D7A978]/70">
-                  Not a substitute for clinical judgement.{" "}
-                  <button
-                    onClick={() => setShowDisclaimer(true)}
-                    className="underline hover:opacity-80"
-                  >
-                    Read More
-                  </button>
+                <p className="my-0 text-xs text-[#8B5E3C]/70 dark:text-[#D7A978]/70">
+                  Clinical decision-support tool for healthcare professionals. Based on NICE and local guidance.
+                  Not a substitute for clinical judgement.
                 </p>
+
+                <button
+                  type="button"
+                  onClick={() => setShowDisclaimer(true)}
+                  className="text-xs text-[#8B5E3C]/70 dark:text-[#D7A978]/70 underline hover:opacity-80 cursor-pointer"
+                >
+                  Clinical Safety & Intended Use
+                </button>
               </div>
             </TooltipProvider>
 
@@ -428,6 +442,7 @@ export default function PdfChat() {
           </section>
         </CardContent>
       </Card>
+
       {/* Disclaimer */}
       {showDisclaimer && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
@@ -463,8 +478,9 @@ export default function PdfChat() {
                 It is designed to support, not replace, clinical reasoning and does not function as an autonomous diagnostic or decision-making system.
               </p>
 
-              <p>
-                System Scope and Function:<br />
+              <div>
+                <p>
+                  System Scope and Function:</p>
                 <ul className="list-disc list-inside">
                   <li>The system retrieves and summarises existing guidance and does not generate novel clinical recommendations independent of source material</li>
                   <li>Outputs are intended to aid clinical thinking and workflow efficiency, particularly in time-pressured environments</li>
@@ -474,37 +490,43 @@ export default function PdfChat() {
                   <li>It must not be used as the sole basis for diagnosis, prescribing, or management decisions</li>
                   <li>It must not be used in emergency or time-critical situations</li>
                 </ul>
-              </p>
+              </div>
 
-              <p>
-                It does not replace:
+              <div>
+                <p>
+                  It does not replace:</p>
                 <ul className="list-disc list-inside">
                   <li>Comprehensive clinical assessment</li>
                   <li>Professional judgement</li>
                   <li>Direct consultation of source guidance where required</li>
                 </ul>
-              </p>
+              </div>
 
-              <p>
-                The system may not fully account for:
+              <div>
+                <p>
+                  The system may not fully account for:</p>
                 <ul className="list-disc list-inside">
                   <li>Complex multimorbidity</li>
                   <li>Atypical presentations</li>
                   <li>Safeguarding concerns</li>
                   <li>Individual patient-specific nuances unless explicitly considered by the clinician</li>
                 </ul>
-              </p>
 
-              <p>
-                User Responsibilities:
+              </div>
+
+              <div>
+                <p>
+                  User Responsibilities:</p>
                 <ul className="list-disc list-inside">
                   <li>Applying independent clinical judgement at all times</li>
                   <li>Verifying outputs against source guidance, including NICE and local pathways</li>
                 </ul>
-              </p>
 
-              <p>
-                Ensuring decisions align with:
+              </div>
+
+              <div>
+                <p>
+                  Ensuring decisions align with:</p>
                 <ul className="list-disc list-inside">
                   <li>Current national guidance</li>
                   <li>Local prescribing and referral policies</li>
@@ -514,23 +536,27 @@ export default function PdfChat() {
                   <li>The system is not designed to store, process, or transmit personal data</li>
                   <li>Accuracy and Currency</li>
                 </ul>
-              </p>
 
-              <p>
-                Accountability:
+              </div>
+
+              <div>
+                <p>
+                  Accountability:</p>
                 <ul className="list-disc list-inside">
                   <li>Use of this system is at the clinician’s discretion</li>
                 </ul>
-              </p>
 
-              <p>
-                While the system is designed to reflect recognised guidance sources, no guarantee is made regarding:
+              </div>
+
+              <div>
+                <p>While the system is designed to reflect recognised guidance sources, no guarantee is made regarding:</p>
                 <ul className="list-disc list-inside">
                   <li>Completeness</li>
                   <li>Accuracy</li>
                   <li>Currency</li>
                 </ul>
-              </p>
+
+              </div>
 
               <p>
                 Clinical guidance evolves, and users are responsible for ensuring alignment with the most up-to-date evidence and policies.
