@@ -441,46 +441,103 @@ export default function PdfChat() {
             </button>
 
             <h2 className="text-xl font-bold mb-4 text-[#8B5E3C] dark:text-[#D7A978]">
-              Disclaimer & Terms of Use
+              Intended Use, Safety Statement and Disclaimer
             </h2>
 
             <div className="space-y-4 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
               <p>
-                This platform is provided for informational and educational purposes only.
-                It is designed to assist qualified healthcare professionals by summarising
-                clinical guidance and offering general decision-support information.
+                Intended Use:
               </p>
 
               <p>
-                It does not constitute medical advice and must not be relied upon as a
-                substitute for professional clinical judgement, independent verification,
-                or consultation of authoritative sources.
+                This system is a retrieval-based clinical decision-support tool designed for use by qualified healthcare professionals.
+                It assists users in rapidly accessing and structuring relevant guidance during clinical consultations.
               </p>
 
               <p>
-                Users must exercise their own clinical expertise, judgement, and due
-                diligence when interpreting and applying any information generated.
+                The system summarises information derived from recognised sources,
+                including NICE Clinical Knowledge Summaries (CKS), Derbyshire Medicines Management guidance, and local clinical pathways.
               </p>
 
               <p>
-                Clinical decisions must be based on a comprehensive assessment of the
-                individual patient, current evidence-based guidance, national standards,
-                and applicable local policies.
+                It is designed to support, not replace, clinical reasoning and does not function as an autonomous diagnostic or decision-making system.
               </p>
 
               <p>
-                Do not input patient-identifiable or confidential information. All data
-                entered should be fully anonymised.
+                System Scope and Function:<br />
+                <ul className="list-disc list-inside">
+                  <li>The system retrieves and summarises existing guidance and does not generate novel clinical recommendations independent of source material</li>
+                  <li>Outputs are intended to aid clinical thinking and workflow efficiency, particularly in time-pressured environments</li>
+                  <li>The system does not interpret or process patient-identifiable data</li>
+                  <li>Safety Positioning and Limitations</li>
+                  <li>This tool is intended for use by qualified clinicians only</li>
+                  <li>It must not be used as the sole basis for diagnosis, prescribing, or management decisions</li>
+                  <li>It must not be used in emergency or time-critical situations</li>
+                </ul>
               </p>
 
               <p>
-                No warranties are made regarding accuracy, completeness, reliability, or
-                currency of information provided.
+                It does not replace:
+                <ul className="list-disc list-inside">
+                  <li>Comprehensive clinical assessment</li>
+                  <li>Professional judgement</li>
+                  <li>Direct consultation of source guidance where required</li>
+                </ul>
               </p>
 
               <p>
-                By using this platform, you agree that sole responsibility for all
-                clinical decisions and patient outcomes rests with the treating clinician.
+                The system may not fully account for:
+                <ul className="list-disc list-inside">
+                  <li>Complex multimorbidity</li>
+                  <li>Atypical presentations</li>
+                  <li>Safeguarding concerns</li>
+                  <li>Individual patient-specific nuances unless explicitly considered by the clinician</li>
+                </ul>
+              </p>
+
+              <p>
+                User Responsibilities:
+                <ul className="list-disc list-inside">
+                  <li>Applying independent clinical judgement at all times</li>
+                  <li>Verifying outputs against source guidance, including NICE and local pathways</li>
+                </ul>
+              </p>
+
+              <p>
+                Ensuring decisions align with:
+                <ul className="list-disc list-inside">
+                  <li>Current national guidance</li>
+                  <li>Local prescribing and referral policies</li>
+                  <li>Individual patient context</li>
+                  <li>Data Use and Information Governance</li>
+                  <li>No patient-identifiable or confidential information should be entered into the system</li>
+                  <li>The system is not designed to store, process, or transmit personal data</li>
+                  <li>Accuracy and Currency</li>
+                </ul>
+              </p>
+
+              <p>
+                Accountability:
+                <ul className="list-disc list-inside">
+                  <li>Use of this system is at the clinician’s discretion</li>
+                </ul>
+              </p>
+
+              <p>
+                While the system is designed to reflect recognised guidance sources, no guarantee is made regarding:
+                <ul className="list-disc list-inside">
+                  <li>Completeness</li>
+                  <li>Accuracy</li>
+                  <li>Currency</li>
+                </ul>
+              </p>
+
+              <p>
+                Clinical guidance evolves, and users are responsible for ensuring alignment with the most up-to-date evidence and policies.
+              </p>
+
+              <p>
+                Responsibility for all clinical decisions and patient outcomes remains solely with the treating clinician.
               </p>
             </div>
           </div>
