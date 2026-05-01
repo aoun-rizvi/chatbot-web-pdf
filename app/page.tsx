@@ -348,7 +348,7 @@ export default function PdfChat() {
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Let's play fetch! You ask a question and I fetch the answer!"
+                placeholder="Let's play fetch! Do not enter identifiable patient information. You ask a question and I fetch the answer!"
                 className="flex-1 h-24 resize-none
              bg-[#F9EFDF] border border-[#EED9C4] text-slate-900
              placeholder:text-slate-500
