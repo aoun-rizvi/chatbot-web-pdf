@@ -29,6 +29,12 @@ export default function PdfChat() {
     []
   );
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupConfirmations, setPopupConfirmations] = useState({
+    professional: false, noPatientData: false, responsible: false,
+  });
+  const allConfirmed =
+    popupConfirmations.professional && popupConfirmations.noPatientData && popupConfirmations.responsible;
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,12 +51,12 @@ export default function PdfChat() {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Show pop-up disclaimer only once for new users
+  // Show popup only once for new users
   useEffect(() => {
     const hasSeenDisclaimer = localStorage.getItem("hasSeenClinicalDisclaimer");
 
     if (!hasSeenDisclaimer) {
-      setShowDisclaimer(true);
+      setShowPopup(true);
       localStorage.setItem("hasSeenClinicalDisclaimer", "true");
     }
   }, []);
@@ -569,6 +575,97 @@ export default function PdfChat() {
           </div>
         </div>
       )}
+
+      {/* Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-[#FAE9D2] dark:bg-slate-800 shadow-2xl border border-[#EED9C4] dark:border-slate-700 p-6 relative">
+
+            <h2 className="text-xl font-bold mb-4 text-[#8B5E3C] dark:text-[#D7A978]">
+              Clinical Use Confirmation
+            </h2>
+
+            <div className="pb-4 space-y-4 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+              <p>
+                This tool is a clinical decision support system designed for use by qualified healthcare professionals.
+              </p>
+
+              <p>
+                It summarises guidance from NICE CKS and local pathways to support clinical reasoning.
+                It does not replace clinical judgement or independent verification of guidance.
+              </p>
+
+              <div>
+                <p className="mb-2">
+                  Before continuing, please confirm:
+                </p>
+
+                <div className="space-y-2 text-sm">
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={popupConfirmations.professional}
+                      onChange={(e) =>
+                        setPopupConfirmations((prev) => ({
+                          ...prev,
+                          professional: e.target.checked,
+                        }))
+                      }
+                      className="mt-1"
+                    />
+                    <span>I am a qualified healthcare professional</span>
+                  </label>
+
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={popupConfirmations.noPatientData}
+                      onChange={(e) =>
+                        setPopupConfirmations((prev) => ({
+                          ...prev,
+                          noPatientData: e.target.checked,
+                        }))
+                      }
+                      className="mt-1"
+                    />
+                    <span>I will not enter any patient identifiable or confidential information</span>
+                  </label>
+
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={popupConfirmations.responsible}
+                      onChange={(e) =>
+                        setPopupConfirmations((prev) => ({
+                          ...prev,
+                          responsible: e.target.checked,
+                        }))
+                      }
+                      className="mt-1"
+                    />
+                    <span>
+                      I understand this tool is for decision support only and I remain responsible for all clinical decisions
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <Button
+              disabled={!allConfirmed}
+              onClick={() => setShowPopup(false)}
+              aria-label="Check all to continue to tool"
+              title="Check all to continue to tool"
+              className="min-w-0 flex-1 font-semibold cursor-pointer
+                     bg-[#C98A5B] hover:bg-[#B97D51] text-white
+                     dark:bg-[#E6B980] dark:hover:bg-[#D7A978] dark:text-slate-900
+                     disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Continue to Tool
+            </Button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
