@@ -175,6 +175,17 @@ export default function PdfChat() {
     addDocumentsForPdfs();
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/logout", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+    } finally {
+      window.location.replace("/login");
+    }
+  };
+
   const TypingIndicator = () => {
     return (
       <div className="flex justify-center mb-2">
@@ -217,7 +228,27 @@ export default function PdfChat() {
                 Medi Milo - AI Assistant
               </h1>
             </div>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="
+      border-[#EED9C4]
+      text-[#5B3B28]
+      hover:bg-[#F6E2CB]
+      dark:border-slate-600
+      dark:text-slate-100
+      dark:hover:bg-slate-700
+    "
+              >
+                Log out
+              </Button>
+            </div>
           </header>
 
           {/* Scrollable message area */}
